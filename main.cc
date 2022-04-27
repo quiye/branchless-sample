@@ -8,6 +8,18 @@
 #include <vector>
 
 using namespace std;
+
+int branchless_lower_bound0(vector<int>& v, int target) {
+  int len = v.size();
+  int start = 0;
+  while (len > 1) {
+    int mid = len >> 1;
+    start = target <= v[start + mid] ? start : start + mid;
+    len -= mid;
+  }
+  return start + len;
+}
+
 int branchless_lower_bound1(vector<int>& v, int target) {
   int len = v.size();
   int start = 0;
@@ -41,58 +53,15 @@ int branchless_lower_bound3(vector<int>& v, int target) {
   return start;
 }
 
-#include "benchmark/include/benchmark/benchmark.h"
-
-static void test1(benchmark::State& state) {
+int main() {
   vector<int> v;
-  for (int i = 0; i < state.range(0); i++) {
-    v.push_back(i);  // 0, 3, 6
+  for (int i = 0; i < 100; i++) {
+    v.push_back(i * 5);
   }
-  for (auto _ : state) {
-    for (size_t i = 0; i < 19999; i++) {
-      branchless_lower_bound1(v, 77);
-    }
-  }
+  auto arg = 4969;
+  cout << branchless_lower_bound0(v, arg) << endl;
+  cout << branchless_lower_bound1(v, arg) << endl;
+  cout << branchless_lower_bound2(v, arg) << endl;
+  cout << branchless_lower_bound3(v, arg) << endl;
+  cout << *lower_bound(v.begin(), v.end(), arg) << endl;
 }
-BENCHMARK(test1)->DenseRange(0, 300, 50);
-
-static void test2(benchmark::State& state) {
-  vector<int> v;
-  for (int i = 0; i < state.range(0); i++) {
-    v.push_back(i);  // 0, 3, 6
-  }
-  for (auto _ : state) {
-    for (size_t i = 0; i < 19999; i++) {
-      branchless_lower_bound2(v, 77);
-    }
-  }
-}
-BENCHMARK(test2)->DenseRange(0, 300, 50);
-
-static void test3(benchmark::State& state) {
-  vector<int> v;
-  for (int i = 0; i < state.range(0); i++) {
-    v.push_back(i);  // 0, 3, 6
-  }
-  for (auto _ : state) {
-    for (size_t i = 0; i < 19999; i++) {
-      branchless_lower_bound3(v, 77);
-    }
-  }
-}
-BENCHMARK(test3)->DenseRange(0, 300, 50);
-
-static void test4(benchmark::State& state) {
-  vector<int> v;
-  for (int i = 0; i < state.range(0); i++) {
-    v.push_back(i);  // 0, 3, 6
-  }
-  for (auto _ : state) {
-    for (size_t i = 0; i < 19999; i++) {
-      std::lower_bound(v.begin(), v.end(), 7);
-    }
-  }
-}
-BENCHMARK(test4)->DenseRange(0, 300, 50);
-
-BENCHMARK_MAIN();

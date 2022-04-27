@@ -45,54 +45,54 @@ int branchless_lower_bound3(vector<int>& v, int target) {
 
 static void test1(benchmark::State& state) {
   vector<int> v;
-  for (int i = 0; i < 512; i++) {
+  for (int i = 0; i < state.range(0); i++) {
     v.push_back(i);  // 0, 3, 6
   }
   for (auto _ : state) {
     for (size_t i = 0; i < 19999; i++) {
-      branchless_lower_bound1(v, state.range(0));
+      branchless_lower_bound1(v, 77);
     }
   }
 }
-BENCHMARK(test1)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111);
+BENCHMARK(test1)->DenseRange(0, 300, 50);
 
 static void test2(benchmark::State& state) {
   vector<int> v;
-  for (int i = 0; i < 512; i++) {
+  for (int i = 0; i < state.range(0); i++) {
     v.push_back(i);  // 0, 3, 6
   }
   for (auto _ : state) {
     for (size_t i = 0; i < 19999; i++) {
-      branchless_lower_bound2(v, state.range(0));
+      branchless_lower_bound2(v, 77);
     }
   }
 }
-BENCHMARK(test2)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111);
+BENCHMARK(test2)->DenseRange(0, 300, 50);
 
 static void test3(benchmark::State& state) {
   vector<int> v;
-  for (int i = 0; i < 512; i++) {
+  for (int i = 0; i < state.range(0); i++) {
     v.push_back(i);  // 0, 3, 6
   }
   for (auto _ : state) {
     for (size_t i = 0; i < 19999; i++) {
-      branchless_lower_bound3(v, state.range(0));
+      branchless_lower_bound3(v, 77);
     }
   }
 }
-BENCHMARK(test3)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111);
+BENCHMARK(test3)->DenseRange(0, 300, 50);
 
 static void test4(benchmark::State& state) {
   vector<int> v;
-  for (int i = 0; i < 512; i++) {
+  for (int i = 0; i < state.range(0); i++) {
     v.push_back(i);  // 0, 3, 6
   }
   for (auto _ : state) {
     for (size_t i = 0; i < 19999; i++) {
-      std::lower_bound(v.begin(), v.end(), state.range(0));
+      std::lower_bound(v.begin(), v.end(), 7);
     }
   }
 }
-BENCHMARK(test4)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111)->DenseRange(0, 1, 111);
+BENCHMARK(test4)->DenseRange(0, 300, 50);
 
 BENCHMARK_MAIN();
